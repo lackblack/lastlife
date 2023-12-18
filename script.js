@@ -29,7 +29,7 @@ function findDeathDate() {
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
           const resultText = `<b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
-            let pageTitle = '';
+            let pageTitle = ''; // Define pageTitle variable here
             if (death.pages && death.pages[0]) {
               pageTitle = death.pages[0].title.replace(/ /g, '_');
               const imageResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`);
