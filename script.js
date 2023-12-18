@@ -48,16 +48,21 @@ function findDeathDate() {
           if (deathInfo.length > 0) {
             const person = deathInfo[0];
             const deathDate = person.death_date ? new Date(person.death_date) : null;
-            const personAgeAtDeath = deathDate ? deathDate.getFullYear() - selectedYear : null;
+            const personBirthDate = person.birth_date ? new Date(person.birth_date) : null;
+
+            let personAgeAtDeath = null;
+            if (deathDate && personBirthDate) {
+              personAgeAtDeath = deathDate.getFullYear() - personBirthDate.getFullYear();
+            }
 
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
             const userAge = currentYear - formattedDate.getFullYear();
             const additionalInfoElement = document.getElementById('additionalInfo');
-            additionalInfoElement.textContent = `You are currently ${userAge} years old. `;
             if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
-              additionalInfoElement.textContent += `The person who died on your birthday was about ${personAgeAtDeath} years old.`;
+              additionalInfoElement.textContent = `The person who died on your birthday was about ${personAgeAtDeath} years old. `;
             }
+            additionalInfoElement.textContent += `You are currently ${userAge} years old.`;
           }
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
