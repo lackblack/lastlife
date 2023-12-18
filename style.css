@@ -2,6 +2,8 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -9,6 +11,7 @@ body {
   margin: 0 auto;
   text-align: center;
   padding: 20px;
+  position: relative; /* Needed for background pseudo-element */
 }
 
 .content {
@@ -22,4 +25,16 @@ button {
   padding: 8px 16px;
   margin-top: 10px;
   cursor: pointer;
+}
+
+.container::before {
+  content: "✞☠✞☠✞☠✞☠"; /* Adjust the characters and repetition as needed */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 50px; /* Adjust the font size as needed */
+  color: rgba(0, 0, 0, 0.1); /* Adjust the color and opacity */
+  z-index: -1; /* Ensure the background stays behind other content */
 }
