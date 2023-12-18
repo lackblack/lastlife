@@ -1,2 +1,0 @@
-# lastlife
-Last Life Game
