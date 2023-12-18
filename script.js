@@ -29,7 +29,7 @@ function findDeathDate() {
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
           const resultText = `<div><i>"Someone had to die for you to be born."</i></div><br><b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
-            let pageTitle = ''; // Define pageTitle variable here
+            let pageTitle = '';
             if (death.pages && death.pages[0]) {
               pageTitle = death.pages[0].title.replace(/ /g, '_');
               const imageResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`);
@@ -46,7 +46,7 @@ function findDeathDate() {
 
           // Displaying additional information about the person who died on the user's birthdate
           const deathInfo = deathsByYear[selectedYear]; // Assuming you get the info for the selected year
-          showResult(deathInfo, birthdate);
+          showResult(deathInfo, birthdate, selectedYear);
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
         }
@@ -57,7 +57,7 @@ function findDeathDate() {
     .catch(error => console.log(error));
 }
 
-function showResult(deathInfo, birthdate) {
+function showResult(deathInfo, birthdate, selectedYear) {
   const resultElement = document.getElementById('additionalInfo');
   const formattedDate = new Date(birthdate);
   const birthYear = formattedDate.getFullYear();
@@ -68,14 +68,13 @@ function showResult(deathInfo, birthdate) {
   if (deathInfo.length > 0) {
     const person = deathInfo[0]; // Assuming you're showing information about the first person who died on that date
 
-    const deathDate = new Date(person.death_date);
-    const deathYear = deathDate.getFullYear();
-    const personAgeAtDeath = deathYear - birthYear;
+    const deathDate = person.death_date ? new Date(person.death_date) : null;
+    const personAgeAtDeath = deathDate ? deathDate.getFullYear() - formattedDate.getFullYear() : null;
 
     let text = '';
     if (personAgeAtDeath > 0) {
-      text += `Someone died on the same day as your birthday (${birthdate}). They lived to be about ${personAgeAtDeath} years old when they passed away.`;
-      text += ` At that time, you were approximately ${userAge - (currentYear - deathYear)} years old. Keep making the most of your time!`;
+      text += `Someone died on the same day as your birthday (${birthdate}). They lived to be about ${personAgeAtDeath} years old.`;
+      text += ` At that time, you were approximately ${userAge - (currentYear - selectedYear)} years old. Keep making the most of your time!`;
     } else {
       text += `Someone died on the same day as your birthday (${birthdate}). They were the same age as you! What are the odds?`;
     }
@@ -85,5 +84,3 @@ function showResult(deathInfo, birthdate) {
     resultElement.textContent = 'No death events found on this day.';
   }
 }
-
-
