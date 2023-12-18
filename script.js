@@ -21,6 +21,7 @@ function findPerson() {
     });
 }
 
+
  else {
         document.getElementById('result').innerHTML = "No historical figures found for this date.";
       }
