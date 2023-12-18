@@ -35,7 +35,10 @@ function findDeathDate() {
               const imageData = await imageResponse.json();
               imageUrl = imageData.originalimage ? imageData.originalimage.source : '';
             }
-            return `<div><img src="${imageUrl}" width="100" height="100">${death.text}</div>`;
+            return `<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+              <img src="${imageUrl}" width="100" height="100" style="margin-bottom: 10px;">
+              <div>${death.text}</div>
+            </div>`;
           }))).join('<br>')}`;
           document.getElementById('lastLife').innerHTML = resultText;
         } else {
