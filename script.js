@@ -29,8 +29,9 @@ function findDeathDate() {
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
           const resultText = `<b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
+            let pageTitle = '';
             if (death.pages && death.pages[0]) {
-              const pageTitle = death.pages[0].title.replace(/ /g, '_');
+              pageTitle = death.pages[0].title.replace(/ /g, '_');
               const imageResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`);
               const imageData = await imageResponse.json();
               imageUrl = imageData.originalimage ? imageData.originalimage.source : '';
