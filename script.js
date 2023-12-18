@@ -7,7 +7,7 @@ function findDeathDate() {
 
   fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/deaths/${month}/${day}`)
     .then(response => response.json())
-    .then(data => {
+    .then(async data => {
       if (data.deaths && data.deaths.length > 0) {
         const deathsByYear = {};
 
@@ -27,7 +27,7 @@ function findDeathDate() {
         }
 
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
-          const resultText = `<b>${selectedYear}:</b><br>${deathsByYear[selectedYear].map(async death => {
+          const resultText = `<b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
             if (death.pages && death.pages[0]) {
               const pageTitle = death.pages[0].title.replace(/ /g, '_');
@@ -36,7 +36,7 @@ function findDeathDate() {
               imageUrl = imageData.originalimage ? imageData.originalimage.source : '';
             }
             return `<div><img src="${imageUrl}" width="100" height="100">${death.text}</div>`;
-          }).join('<br>')}`;
+          }))).join('<br>')}`;
           document.getElementById('lastLife').innerHTML = resultText;
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
