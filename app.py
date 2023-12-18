@@ -12,21 +12,24 @@ def index():
 def find_historical_figure():
     birthdate = request.form['birthdate']
     
-    # Construct a Wikipedia query based on the birthdate
-    url = f'https://en.wikipedia.org/wiki/Special:Search?search=Deaths+around+{birthdate}&go=Go'
+    # Construct a Wikipedia URL for deaths around the birthdate
+    url = f'https://en.wikipedia.org/wiki/{birthdate}_in_deaths'
     response = requests.get(url)
     
     # Parse the HTML response
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Find relevant information within the parsed HTML
-    result = soup.find('div', class_='mw-search-result-heading')
+    # Find the first listed death on that date
+    result = soup.find('div', {'id': 'mw-content-text'}).find('ul')
+    
     if result:
-        name = result.a.text
-        link = 'https://en.wikipedia.org' + result.a['href']
+        # Extracting the first listed death name and link
+        name = result.find('li').find('a').text
+        link = 'https://en.wikipedia.org' + result.find('li').find('a')['href']
         return jsonify({'name': name, 'link': link})
     
-    return jsonify({'error': 'No historical figure found.'})
+    return jsonify({'error': 'No historical figure found for this date.'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
