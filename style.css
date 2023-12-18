@@ -28,23 +28,23 @@ button {
 }
 
 .container::before {
-  content: "✞☠✞☠✞☠✞☠"; /* Adjust the characters and repetition as needed */
+  content: "✞☠✞☠✞☠✞☠✞☠"; /* Characters for the background */
   position: absolute;
-  top: -100%; /* Initial position off the top */
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  font-size: 20px; /* Adjust the font size as needed */
-  color: rgba(0, 0, 0, 0.1); /* Adjust the color and opacity */
+  font-size: 10px; /* Adjust the font size as needed */
+  color: rgba(0, 0, 0, 0.9); /* Adjust the color and opacity */
   z-index: -1; /* Ensure the background stays behind other content */
-  animation: floatBackground 10s linear infinite; /* Animation for floating effect */
+  animation: floatBackground 30s linear infinite; /* Animation for floating effect */
 }
 
 @keyframes floatBackground {
-  from {
-    transform: translateY(-100%);
+  0% {
+    transform: translateY(0) translateX(0);
   }
-  to {
-    transform: translateY(100%);
+  100% {
+    transform: translateY(100vh) translateX(calc(100vw - 20px));
   }
 }
