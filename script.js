@@ -1,7 +1,6 @@
 function findDeathDate() {
   const birthdate = document.getElementById('birthdate').value;
   const formattedDate = new Date(birthdate);
-  const birthYear = formattedDate.getFullYear();
   const month = formattedDate.getMonth() + 1;
   const day = formattedDate.getDate();
 
@@ -9,38 +8,12 @@ function findDeathDate() {
     .then(response => response.json())
     .then(data => {
       if (data.deaths && data.deaths.length > 0) {
-        const deathsByYear = {};
-
-        // Group deaths by year
-        data.deaths.forEach(death => {
-          const deathYear = death.year || new Date(death.death_date).getFullYear();
-          if (!deathsByYear[deathYear]) {
-            deathsByYear[deathYear] = [];
-          }
-          deathsByYear[deathYear].push(death);
-        });
-
-        // Sort by year, putting the user's birth year first
-        const sortedYears = Object.keys(deathsByYear).sort((a, b) => {
-          if (a === birthYear.toString()) return -1;
-          if (b === birthYear.toString()) return 1;
-          return a - b;
-        });
-
-        // Display deaths by year
-        let resultText = '';
-        sortedYears.forEach(year => {
-          if (deathsByYear[year].length > 0) {
-            resultText += `<b>${year}:</b><br>`;
-            deathsByYear[year].forEach(death => {
-              resultText += `${death.text}<br>`;
-            });
-          }
-        });
-
-        document.getElementById('lastLife').innerHTML = resultText;
+        const randomIndex = Math.floor(Math.random() * data.deaths.length);
+        const lastLifeInfo = data.deaths[randomIndex];
+        const lastLifeText = `On your birthday, someone like you passed away: ${lastLifeInfo.text}`;
+        document.getElementById('lastLife').textContent = lastLifeText;
       } else {
-        document.getElementById('lastLife').textContent = 'No death events found on this day.';
+        document.getElementById('lastLife').textContent = 'No matching death found on that day.';
       }
     })
     .catch(error => console.log(error));
