@@ -74,7 +74,7 @@ function showResult(deathInfo, birthDate) {
       text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They lived to be about ${personAgeAtDeath} years old.`;
       text += ` At that time, you were approximately ${userAge - (currentYear - deathDate.getFullYear())} years old. Keep making the most of your time!`;
     } else {
-      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They 666555444 were the same age as you! What are the odds?`;
+      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh were the same age as you! What are the odds?`;
     }
 
     resultElement.innerHTML = text;
@@ -82,3 +82,4 @@ function showResult(deathInfo, birthDate) {
     resultElement.textContent = 'No death events found on this day.';
   }
 }
+
