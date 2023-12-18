@@ -1,40 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Birthday Game</title>
+  <meta charset="UTF-8">
+  <title>Wikipedia Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <label for="birthdate">Enter your birthdate:</label>
-    <input type="date" id="birthdate">
-    <button onclick="findHistoricalFigure()">Find Historical Figure</button>
-    <div id="result"></div>
-
-    <script>
-        function findHistoricalFigure() {
-            const birthdate = document.getElementById('birthdate').value;
-            fetch('/find_historical_figure', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `birthdate=${birthdate}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                const resultDiv = document.getElementById('result');
-                if (data.error) {
-                    resultDiv.innerHTML = `<p>${data.error}</p>`;
-                } else {
-                    resultDiv.innerHTML = `
-                        <p>Closest historical figure: ${data.name}</p>
-                        <p><a href="${data.link}" target="_blank">Link to Wikipedia</a></p>
-                    `;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
+  <div class="container">
+    <h1>Random Wikipedia Article Game</h1>
+    <div class="content">
+      <p>Guess the topic of this Wikipedia article:</p>
+      <p id="article-content">Loading...</p>
+      <input type="text" id="user-guess" placeholder="Your guess...">
+      <button onclick="checkGuess()">Check Guess</button>
+      <p id="result"></p>
+      <button onclick="getNewArticle()">Get New Article</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
