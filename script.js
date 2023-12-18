@@ -8,11 +8,8 @@ function findDeathDate() {
   fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/deaths/${month}/${day}`)
     .then(response => response.json())
     .then(data => {
-      if (data.deaths && data.deaths.length > 0) {
-        const matchingDeaths = data.deaths.filter(death => {
-          const deathDate = new Date(death.death_date);
-          return deathDate.getMonth() + 1 === month && deathDate.getDate() === day && deathDate.getFullYear() === birthYear;
-        });
+      if (data.deaths && data.deaths[0] && data.deaths[0].year === birthYear) {
+        const matchingDeaths = data.deaths.filter(death => death.year === birthYear);
 
         if (matchingDeaths.length > 0) {
           const randomIndex = Math.floor(Math.random() * matchingDeaths.length);
@@ -23,7 +20,7 @@ function findDeathDate() {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birthday in your birth year.';
         }
       } else {
-        document.getElementById('lastLife').textContent = 'No death events found on this day.';
+        document.getElementById('lastLife').textContent = 'No death events found on this day in your birth year.';
       }
     })
     .catch(error => console.log(error));
