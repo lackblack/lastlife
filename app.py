@@ -19,16 +19,23 @@ def find_historical_figure():
     # Parse the HTML response
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Find the first listed death on that date
-    result = soup.find('div', {'id': 'mw-content-text'}).find('ul')
+    # Find the section with the list of deaths
+    deaths_section = soup.find('span', {'id': 'Deaths'})
     
-    if result:
-        # Extracting the first listed death name and link
-        name = result.find('li').find('a').text
-        link = 'https://en.wikipedia.org' + result.find('li').find('a')['href']
-        return jsonify({'name': name, 'link': link})
+    if deaths_section:
+        # Look for the next ul (list) after the Deaths section
+        list_of_deaths = deaths_section.find_next('ul')
+        
+        if list_of_deaths:
+            # Extracting the first listed death name and link
+            first_death = list_of_deaths.find('li')
+            if first_death:
+                name = first_death.find('a').text
+                link = 'https://en.wikipedia.org' + first_death.find('a')['href']
+                return jsonify({'name': name, 'link': link})
     
     return jsonify({'error': 'No historical figure found for this date.'})
+
 
 
 if __name__ == '__main__':
