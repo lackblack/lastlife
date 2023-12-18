@@ -12,29 +12,29 @@ def index():
 def find_historical_figure():
     birthdate = request.form['birthdate']
     
-    # Construct a Wikipedia URL for deaths around the birthdate
-    url = f'https://en.wikipedia.org/wiki/{birthdate}_in_deaths'
+    # Format birthdate to match Wikipedia's date format
+    formatted_date = birthdate.replace('-', '')
+    
+    # Construct the MediaWiki API URL for deaths around the birthdate
+    url = f'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&titles={formatted_date}_deaths'
     response = requests.get(url)
     
-    # Parse the HTML response
-    soup = BeautifulSoup(response.text, 'html.parser')
+    data = response.json()
     
-    # Find the section with the list of deaths
-    deaths_section = soup.find('span', {'id': 'Deaths'})
+    # Extracting information from the API response
+    pages = data['query']['pages']
+    first_page_id = next(iter(pages))
     
-    if deaths_section:
-        # Look for the next ul (list) after the Deaths section
-        list_of_deaths = deaths_section.find_next('ul')
+    if first_page_id != '-1':
+        page = pages[first_page_id]
+        name = page['title']
+        extract = page['extract']
+        link = f'https://en.wikipedia.org/wiki/{formatted_date}_deaths'
         
-        if list_of_deaths:
-            # Extracting the first listed death name and link
-            first_death = list_of_deaths.find('li')
-            if first_death:
-                name = first_death.find('a').text
-                link = 'https://en.wikipedia.org' + first_death.find('a')['href']
-                return jsonify({'name': name, 'link': link})
+        return jsonify({'name': name, 'extract': extract, 'link': link})
     
     return jsonify({'error': 'No historical figure found for this date.'})
+
 
 
 
