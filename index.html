@@ -1,42 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Who Were You?</title>
-  <style>
-    /* Add your CSS styles here */
-  </style>
+    <title>Birthday Game</title>
 </head>
 <body>
-  <h1>Who Were You?</h1>
-  <label for="birthdate">Enter Your Birthdate:</label>
-  <input type="date" id="birthdate">
-  <button onclick="findPerson()">Find Out</button>
-  <div id="result"></div>
+    <label for="birthdate">Enter your birthdate:</label>
+    <input type="date" id="birthdate">
+    <button onclick="findHistoricalFigure()">Find Historical Figure</button>
+    <div id="result"></div>
 
-  <script>
-    function findPerson() {
-      const birthdate = document.getElementById('birthdate').value;
-      const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=peoplewhothisdatepassedaway&pwtdpadate=${birthdate}&format=json&callback=handleData`;
-
-      // Create a script element to load the API data as JSONP
-      const script = document.createElement('script');
-      script.src = apiUrl;
-
-      // Append the script to the document body
-      document.body.appendChild(script);
-    }
-
-    // Function to handle the JSONP response
-    function handleData(data) {
-      if (data.query && data.query.peoplewhothisdatepassedaway.length > 0) {
-        const pageId = data.query.peoplewhothisdatepassedaway[0].pageid;
-        const articleUrl = `https://en.wikipedia.org/?curid=${pageId}`;
-        document.getElementById('result').innerHTML = `<a href="${articleUrl}" target="_blank">Discover Who You Were</a>`;
-      } else {
-        document.getElementById('result').innerHTML = "No historical figures found for this date.";
-      }
-    }
-  </script>
+    <script>
+        function findHistoricalFigure() {
+            const birthdate = document.getElementById('birthdate').value;
+            fetch('/find_historical_figure', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `birthdate=${birthdate}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p>Closest historical figure: ${data.name}</p>
+                        <p><a href="${data.link}" target="_blank">Link to Wikipedia</a></p>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </body>
 </html>
