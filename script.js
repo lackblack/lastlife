@@ -46,7 +46,7 @@ function findDeathDate() {
 
           // Displaying additional information about the person who died on the user's birthdate
           const deathInfo = deathsByYear[selectedYear]; // Assuming you get the info for the selected year
-          showResult(deathInfo, birthYear);
+          showResult(deathInfo, formattedDate);
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
         }
@@ -57,23 +57,24 @@ function findDeathDate() {
     .catch(error => console.log(error));
 }
 
-function showResult(deathInfo, userBirthYear) {
+function showResult(deathInfo, birthDate) {
   const resultElement = document.getElementById('additionalInfo');
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const userAge = currentYear - userBirthYear;
+  const userAge = currentYear - birthDate.getFullYear();
 
   if (deathInfo.length > 0) {
     const person = deathInfo[0]; // Assuming you're showing information about the first person who died on that date
 
     const deathDate = person.death_date ? new Date(person.death_date) : null;
-    const personAgeAtDeath = deathDate ? deathDate.getFullYear() - userBirthYear : null;
+    const personAgeAtDeath = deathDate ? deathDate.getFullYear() - birthDate.getFullYear() : null;
 
     let text = '';
     if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
-      text += `Someone died on the same day as your birthday (${currentYear - userAge}). They lived to be about ${personAgeAtDeath} years old.`;
+      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They lived to be about ${personAgeAtDeath} years old.`;
+      text += ` You are currently ${userAge} years old.`;
     } else {
-      text += `Someone died on the same day as your birthday (${currentYear - userAge}). They were the same age as you!!!!!! What are the odds?`;
+      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). SJDSJOFSDJFSDFThey were the same age as you! What are the odds?`;
     }
 
     resultElement.innerHTML = text;
