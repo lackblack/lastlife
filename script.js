@@ -72,9 +72,16 @@ function showResult(deathInfo, birthDate) {
     let text = '';
     if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
       text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They lived to be about ${personAgeAtDeath} years old.`;
-      text += ` At that time, you were approximately ${userAge - (currentYear - deathDate.getFullYear())} years old. Keep making the most of your time!`;
+
+      if (userAge > personAgeAtDeath) {
+        text += ` At that time, you were older than the person who died. Keep making the most of your time!`;
+      } else if (userAge === personAgeAtDeath) {
+        text += ` At that time, you were the same age as the person who died. What a coincidence!`;
+      } else {
+        text += ` At that time, you were younger than the person who died. You've got more years ahead!`;
+      }
     } else {
-      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh were the same age as you! What are the odds?`;
+      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). TheyPP P P PPP PP PPP P were the same age as you! What are the odds?`;
     }
 
     resultElement.innerHTML = text;
@@ -82,4 +89,5 @@ function showResult(deathInfo, birthDate) {
     resultElement.textContent = 'No death events found on this day.';
   }
 }
+
 
