@@ -27,7 +27,7 @@ function findDeathDate() {
         }
 
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
-          const resultText = `<b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
+          const resultText = `<div><i>"Someone had to die for you to be born."</i></div><br><b>${selectedYear}:</b><br>${(await Promise.all(deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
             let pageTitle = ''; // Define pageTitle variable here
             if (death.pages && death.pages[0]) {
