@@ -1,8 +1,39 @@
-/* Rest of your styles */
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  margin: 0;
+  overflow: hidden;
+}
+
+.snowflakes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+  from {
+    transform: translateY(-10%);
+  }
+  to {
+    transform: translateY(110%);
+  }
+}
+
+.snowflake {
+  position: absolute;
+  font-size: 24px;
+  color: black; /* Adjust color to your preference */
+  user-select: none;
+  opacity: 0.5;
+}
+
+.snowflake::before {
+  content: '\1F480'; /* Unicode for skull emoji */
 }
 
 .container {
@@ -10,8 +41,6 @@ body {
   margin: 0 auto;
   text-align: center;
   padding: 20px;
-  position: relative; /* Ensure the container is relative for absolute positioning */
-  overflow: hidden; /* Hide overflow of the container */
 }
 
 .content {
@@ -25,26 +54,4 @@ button {
   padding: 8px 16px;
   margin-top: 10px;
   cursor: pointer;
-}
-
-.container::before {
-  content: "✞☠✞☠✞☠✞☠✞☠"; /* Characters for the background */
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  font-size: 10px; /* Adjust the font size as needed */
-  color: rgba(0, 0, 0, 0.9); /* Adjust the color and opacity */
-  z-index: -1; /* Ensure the background stays behind other content */
-  animation: floatBackground 30s linear infinite; /* Animation for floating effect */
-}
-
-@keyframes floatBackground {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  100% {
-    transform: translateY(100vh) translateX(calc(100vw - 20px));
-  }
 }
