@@ -1,17 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Who Were You?</title>
-    <title>Who Were You?</title>
-  <script src="script.js"></script>
-
+  <style>
+    /* Add your CSS styles here */
+  </style>
 </head>
 <body>
   <h1>Who Were You?</h1>
   <label for="birthdate">Enter Your Birthdate:</label>
   <input type="date" id="birthdate">
-  <button onclick="findPerson()">Find Out</button>
+  <button id="findButton">Find Out</button>
   <div id="result"></div>
 
+  <script>
+    function findPerson() {
+      const birthdate = document.getElementById('birthdate').value;
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=peoplewhothisdatepassedaway&pwtdpadate=${birthdate}&format=json`;
+
+      fetch(proxyUrl + apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.query && data.query.peoplewhothisdatepassedaway.length > 0) {
+            const pageId = data.query.peoplewhothisdatepassedaway[0].pageid;
+            const articleUrl = `https://en.wikipedia.org/?curid=${pageId}`;
+            document.getElementById('result').innerHTML = `<a href="${articleUrl}" target="_blank">Discover Who You Were</a>`;
+          } else {
+            document.getElementById('result').innerHTML = "No historical figures found for this date.";
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').innerHTML = "An error occurred while fetching data. Please check the console for more details.";
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const button = document.getElementById('findButton');
+      button.addEventListener('click', findPerson);
+    });
+  </script>
 </body>
 </html>
