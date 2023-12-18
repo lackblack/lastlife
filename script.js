@@ -44,9 +44,14 @@ function findDeathDate() {
 
           document.getElementById('lastLife').innerHTML = resultText;
 
-          // Displaying additional information about the person who died on the user's birthdate
-          const deathInfo = deathsByYear[selectedYear]; // Assuming you get the info for the selected year
-          showResult(deathInfo, formattedDate);
+          const deathInfo = deathsByYear[selectedYear];
+          if (deathInfo.length > 0) {
+            // Displaying only the user's current age
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const userAge = currentYear - formattedDate.getFullYear();
+            document.getElementById('additionalInfo').textContent = `You are currently ${userAge} years old.`;
+          }
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
         }
@@ -56,38 +61,3 @@ function findDeathDate() {
     })
     .catch(error => console.log(error));
 }
-
-function showResult(deathInfo, birthDate) {
-  const resultElement = document.getElementById('additionalInfo');
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const userAge = currentYear - birthDate.getFullYear();
-
-  if (deathInfo.length > 0) {
-    const person = deathInfo[0]; // Assuming you're showing information about the first person who died on that date
-
-    const deathDate = person.death_date ? new Date(person.death_date) : null;
-    const personAgeAtDeath = deathDate ? deathDate.getFullYear() - birthDate.getFullYear() : null;
-
-    let text = '';
-    if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
-      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). They lived to be about ${personAgeAtDeath} years old.`;
-
-      if (userAge > personAgeAtDeath) {
-        text += ` At that time, you were older than the person who died. Keep making the most of your time!`;
-      } else if (userAge === personAgeAtDeath) {
-        text += ` At that time, you were the same age as the person who died. What a coincidence!`;
-      } else {
-        text += ` At that time, you were younger than the person who died. You've got more years ahead!`;
-      }
-    } else {
-      text += `Someone died on the same day as your birthday (${birthDate.getFullYear()}). TheyPP P P PPP PP PPP P were the same age as you! What are the odds?`;
-    }
-
-    resultElement.innerHTML = text;
-  } else {
-    resultElement.textContent = 'No death events found on this day.';
-  }
-}
-
-
