@@ -46,7 +46,7 @@ function findDeathDate() {
 
           // Displaying additional information about the person who died on the user's birthdate
           const deathInfo = deathsByYear[selectedYear]; // Assuming you get the info for the selected year
-          showResult(deathInfo, birthdate, birthYear);
+          showResult(deathInfo, birthYear);
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
         }
@@ -57,13 +57,11 @@ function findDeathDate() {
     .catch(error => console.log(error));
 }
 
-function showResult(deathInfo, birthdate, userBirthYear) {
+function showResult(deathInfo, userBirthYear) {
   const resultElement = document.getElementById('additionalInfo');
-  const formattedDate = new Date(birthdate);
-  const birthYear = formattedDate.getFullYear();
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const userAge = currentYear - birthYear;
+  const userAge = currentYear - userBirthYear;
 
   if (deathInfo.length > 0) {
     const person = deathInfo[0]; // Assuming you're showing information about the first person who died on that date
@@ -73,10 +71,9 @@ function showResult(deathInfo, birthdate, userBirthYear) {
 
     let text = '';
     if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
-      text += `Someone died on the same day as your birthday (${birthdate}). They lived to be about ${personAgeAtDeath} years old.`;
-      text += ` You were approximately ${userAge - (currentYear - userBirthYear)} years old when they passed away.`;
+      text += `Someone died on the same day as your birthday (${currentYear - userAge}). They lived to be about ${personAgeAtDeath} years old.`;
     } else {
-      text += `Someone died on the same day as your birthday (${birthdate}). They were the same age as you! What are the KKKKKodds?`;
+      text += `Someone died on the same day as your birthday (${currentYear - userAge}). They were the same age as you!!!!!! What are the odds?`;
     }
 
     resultElement.innerHTML = text;
