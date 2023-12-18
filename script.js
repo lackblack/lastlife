@@ -3,13 +3,22 @@ function findPerson() {
   const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=peoplewhothisdatepassedaway&pwtdpadate=${birthdate}&format=json`;
 
   fetch(apiUrl)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      return response.json();
+    })
     .then(data => {
-      if (data.query && data.query.peoplewhothisdatepassedaway.length > 0) {
-        const pageId = data.query.peoplewhothisdatepassedaway[0].pageid;
-        const articleUrl = `https://en.wikipedia.org/?curid=${pageId}`;
-        document.getElementById('result').innerHTML = `<a href="${articleUrl}" target="_blank">Discover Who You Were</a>`;
-      } else {
+      // Handle the response data
+      console.log(data); // Log the retrieved data to inspect in the browser console
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('result').innerHTML = "An error occurred while fetching data. Please check the console for more details.";
+    });
+}
+ else {
         document.getElementById('result').innerHTML = "No historical figures found for this date.";
       }
     })
