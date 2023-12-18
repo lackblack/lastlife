@@ -8,19 +8,39 @@ function findDeathDate() {
   fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/deaths/${month}/${day}`)
     .then(response => response.json())
     .then(data => {
-      if (data.deaths && data.deaths[0] && data.deaths[0].year === birthYear) {
-        const matchingDeaths = data.deaths.filter(death => death.year === birthYear);
+      if (data.deaths && data.deaths.length > 0) {
+        const deathsByYear = {};
 
-        if (matchingDeaths.length > 0) {
-          const randomIndex = Math.floor(Math.random() * matchingDeaths.length);
-          const lastLifeInfo = matchingDeaths[randomIndex];
-          const lastLifeText = `On your birthday, someone like you passed away: ${lastLifeInfo.text}`;
-          document.getElementById('lastLife').textContent = lastLifeText;
-        } else {
-          document.getElementById('lastLife').textContent = 'No recorded deaths on your birthday in your birth year.';
-        }
+        // Group deaths by year
+        data.deaths.forEach(death => {
+          const deathYear = death.year || new Date(death.death_date).getFullYear();
+          if (!deathsByYear[deathYear]) {
+            deathsByYear[deathYear] = [];
+          }
+          deathsByYear[deathYear].push(death);
+        });
+
+        // Sort by year, putting the user's birth year first
+        const sortedYears = Object.keys(deathsByYear).sort((a, b) => {
+          if (a === birthYear.toString()) return -1;
+          if (b === birthYear.toString()) return 1;
+          return a - b;
+        });
+
+        // Display deaths by year
+        let resultText = '';
+        sortedYears.forEach(year => {
+          if (deathsByYear[year].length > 0) {
+            resultText += `<b>${year}:</b><br>`;
+            deathsByYear[year].forEach(death => {
+              resultText += `${death.text}<br>`;
+            });
+          }
+        });
+
+        document.getElementById('lastLife').innerHTML = resultText;
       } else {
-        document.getElementById('lastLife').textContent = 'No death events found on this day in your birth year.';
+        document.getElementById('lastLife').textContent = 'No death events found on this day.';
       }
     })
     .catch(error => console.log(error));
