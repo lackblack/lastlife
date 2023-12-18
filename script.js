@@ -35,9 +35,9 @@ function findDeathDate() {
               const imageData = await imageResponse.json();
               imageUrl = imageData.originalimage ? imageData.originalimage.source : '';
             }
-            return `<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            return `<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
               <img src="${imageUrl}" width="100" height="100" style="margin-bottom: 10px;">
-              <div>${death.text}</div>
+              <div>${death.text} <a href="https://en.wikipedia.org/wiki/${pageTitle}" target="_blank" rel="noopener noreferrer">(Read more on Wikipedia)</a></div>
             </div>`;
           }))).join('<br>')}`;
           document.getElementById('lastLife').innerHTML = resultText;
