@@ -10,8 +10,8 @@ function findDeathDate() {
     .then(data => {
       if (data.deaths && data.deaths.length > 0) {
         const matchingDeaths = data.deaths.filter(death => {
-          const deathYear = new Date(death.death_date).getFullYear();
-          return deathYear === birthYear;
+          const deathDate = new Date(death.death_date);
+          return deathDate.getMonth() + 1 === month && deathDate.getDate() === day && deathDate.getFullYear() === birthYear;
         });
 
         if (matchingDeaths.length > 0) {
