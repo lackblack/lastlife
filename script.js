@@ -41,7 +41,12 @@ function findDeathDate() {
               <div>${death.text} <a href="https://en.wikipedia.org/wiki/${pageTitle}" target="_blank" rel="noopener noreferrer">(Read more on Wikipedia)</a></div>
             </div>`;
           }))).join('<br>')}`;
+
           document.getElementById('lastLife').innerHTML = resultText;
+
+          // Displaying additional information about the person who died on the user's birthdate
+          const deathInfo = deathsByYear[selectedYear]; // Assuming you get the info for the selected year
+          showResult(deathInfo, birthdate);
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
         }
@@ -50,4 +55,37 @@ function findDeathDate() {
       }
     })
     .catch(error => console.log(error));
+}
+
+function showResult(deathInfo, birthdate) {
+  const resultElement = document.getElementById('additionalInfo');
+  const formattedDate = new Date(birthdate);
+  const birthYear = formattedDate.getFullYear();
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const userAge = currentYear - birthYear;
+
+  if (deathInfo.length > 0) {
+    const person = deathInfo[0]; // Assuming you're showing information about the first person who died on that date
+
+    const deathDate = new Date(person.death_date);
+    const deathYear = deathDate.getFullYear();
+    const personAge = deathYear - birthYear;
+    const ageDifference = personAge - userAge;
+
+    let text = '';
+    if (ageDifference > 0) {
+      text += `Someone died on the same day as your birthday (${birthdate}). They were ${personAge} years old.`;
+      text += ` You're currently ${userAge} years old. Can you beat their record for living years?`;
+    } else if (ageDifference < 0) {
+      text += `Someone died on the same day as your birthday (${birthdate}). They were ${personAge} years old.`;
+      text += ` You've already surpassed their age by ${-ageDifference} years! Keep going!`;
+    } else {
+      text += `Someone died on the same day as your birthday (${birthdate}). They were the same age as you! What are the odds?`;
+    }
+
+    resultElement.innerHTML = text;
+  } else {
+    resultElement.textContent = 'No death events found on this day.';
+  }
 }
