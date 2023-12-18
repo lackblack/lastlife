@@ -20,25 +20,18 @@ function findDeathDate() {
           deathsByYear[deathYear].push(death);
         });
 
-        // Sort by year, putting the user's birth year first
-        const sortedYears = Object.keys(deathsByYear).sort((a, b) => {
-          if (a === birthYear.toString()) return -1;
-          if (b === birthYear.toString()) return 1;
-          return a - b;
-        });
+        // Find the closest available year to the past if no deaths in the birth year
+        let selectedYear = birthYear;
+        while (!deathsByYear[selectedYear] && selectedYear >= 0) {
+          selectedYear--;
+        }
 
-        // Display deaths by year
-        let resultText = '';
-        sortedYears.forEach(year => {
-          if (deathsByYear[year].length > 0) {
-            resultText += `<b>${year}:</b><br>`;
-            deathsByYear[year].forEach(death => {
-              resultText += `${death.text}<br>`;
-            });
-          }
-        });
-
-        document.getElementById('lastLife').innerHTML = resultText;
+        if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
+          const resultText = `<b>${selectedYear}:</b><br>${deathsByYear[selectedYear].map(death => death.text).join('<br>')}`;
+          document.getElementById('lastLife').innerHTML = resultText;
+        } else {
+          document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
+        }
       } else {
         document.getElementById('lastLife').textContent = 'No death events found on this day.';
       }
