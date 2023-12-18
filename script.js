@@ -70,12 +70,12 @@ function showResult(deathInfo, birthdate) {
 
     const deathDate = new Date(person.death_date);
     const deathYear = deathDate.getFullYear();
-    const personAge = deathYear - birthYear;
+    const personAgeAtDeath = deathYear - birthYear;
 
     let text = '';
-    if (personAge > 0) {
-      text += `Someone died on the same day as your birthday (${birthdate}). They lived to be about ${personAge} years old.`;
-      text += ` You're currently ${userAge} years old. Keep making the most of your time!`;
+    if (personAgeAtDeath > 0) {
+      text += `Someone died on the same day as your birthday (${birthdate}). They lived to be about ${personAgeAtDeath} years old when they passed away.`;
+      text += ` At that time, you were approximately ${userAge - (currentYear - deathYear)} years old. Keep making the most of your time!`;
     } else {
       text += `Someone died on the same day as your birthday (${birthdate}). They were the same age as you! What are the odds?`;
     }
@@ -85,4 +85,5 @@ function showResult(deathInfo, birthdate) {
     resultElement.textContent = 'No death events found on this day.';
   }
 }
+
 
