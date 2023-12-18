@@ -46,11 +46,18 @@ function findDeathDate() {
 
           const deathInfo = deathsByYear[selectedYear];
           if (deathInfo.length > 0) {
-            // Displaying only the user's current age
+            const person = deathInfo[0];
+            const deathDate = person.death_date ? new Date(person.death_date) : null;
+            const personAgeAtDeath = deathDate ? deathDate.getFullYear() - selectedYear : null;
+
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
             const userAge = currentYear - formattedDate.getFullYear();
-            document.getElementById('additionalInfo').textContent = `You are currently ${userAge} years old.`;
+            const additionalInfoElement = document.getElementById('additionalInfo');
+            additionalInfoElement.textContent = `You are currently ${userAge} years old. `;
+            if (personAgeAtDeath !== null && personAgeAtDeath > 0) {
+              additionalInfoElement.textContent += `The person who died on your birthday was about ${personAgeAtDeath} years old.`;
+            }
           }
         } else {
           document.getElementById('lastLife').textContent = 'No recorded deaths on your birth year or the closest year available.';
