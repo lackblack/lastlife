@@ -27,11 +27,13 @@ function findDeathDate() {
         }
 
         if (deathsByYear[selectedYear] && deathsByYear[selectedYear].length > 0) {
-          const resultText = `<b>${selectedYear}:</b><br>${deathsByYear[selectedYear].map(death => {
+          const resultText = `<b>${selectedYear}:</b><br>${deathsByYear[selectedYear].map(async death => {
             let imageUrl = '';
             if (death.pages && death.pages[0]) {
               const pageTitle = death.pages[0].title.replace(/ /g, '_');
-              imageUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`;
+              const imageResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`);
+              const imageData = await imageResponse.json();
+              imageUrl = imageData.originalimage ? imageData.originalimage.source : '';
             }
             return `<div><img src="${imageUrl}" width="100" height="100">${death.text}</div>`;
           }).join('<br>')}`;
